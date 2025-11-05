@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- Hereda de Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.17</version>
+        <relativePath/> 
+    </parent>
+    
+    <!-- Coordenadas del Proyecto -->
+    <groupId>com.Genarius</groupId>
+    <artifactId>devsecops-laboratorio</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>laboratorio</name>
+    <description>Laboratorio para pipeline DevSecOps</description>
+    
+    <!-- Propiedades Generales -->
+    <properties>
+        <java.version>11</java.version>
+    </properties>
+    
+    <!-- Dependencias del Proyecto -->
+    <dependencies>
+        <!-- Dependencia estándar para una aplicación web Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Dependencia estándar para pruebas -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- ==================================================================== -->
+        <!-- == VULNERABILIDAD SCA INTRODUCIDA A PROPÓSITO PARA LA DEMOSTRACIÓN == -->       
+        <!-- ==================================================================== -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.14.1</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Configuración de Construcción del Proyecto -->
+    <build>
+        <plugins>
+            <!-- Plugin estándar de Spring Boot para empaquetar la aplicación -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            
+            <!-- ==================================================================== -->
+            <!-- == PLUGIN DE SEGURIDAD SCA: OWASP DEPENDENCY-CHECK                == -->           
+            <!-- ==================================================================== -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>8.4.0</version>
+                <configuration>
+                    <!--                        
+                        Falla el build si se encuentra cualquier vulnerabilidad con un score
+                        CVSS de 5.0 o superior. Esto cubre severidades MEDIA, ALTA y CRÍTICA.
+                    -->
+                    <failBuildOnCVSS>5</failBuildOnCVSS>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!--
+                                Se asocia el goal "check" a la fase de "verify" del ciclo de vida de Maven.
+                                Esto asegura que el análisis se ejecute automáticamente cada vez
+                                que se construye el proyecto con "mvn verify" o "mvn install".
+                            -->
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
